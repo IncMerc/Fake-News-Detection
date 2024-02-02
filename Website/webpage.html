@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake News Detection</title>
+    <style>
+        /* Add your styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        section {
+            margin: 20px;
+        }
+
+        article {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Fake News Detection</h1>
+    </header>
+
+    <section>
+        <!-- Add more articles as needed -->
+
+        <!-- Space to add a model: Replace the form tag with your model integration -->
+        <div>
+            <label for="modelInput">Input your text here:</label>
+            <input type="text" id="modelInput" name="modelInput" placeholder="Enter text...">
+            <button type="submit" id="submitButton" onclick="fetchData()">Submit to Model</button>
+            <h2 id="result"></h2>
+        </div>
+    </section>
+    <script>
+
+        function fetchData() {
+
+            let originInput = document.getElementById('modelInput').value
+    
+            // Replace 'your_api_endpoint' with the actual API endpoint
+            const apiUrl = 'http://127.0.0.1:6969/predict';
+
+            console.log(originInput)
+
+            // Making a simple GET request using the Fetch API
+            fetch('http://127.0.0.1:6969/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ features: originInput }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.Prediction.prediction[0])
+
+                if(data.Prediction.prediction[0] == 0){
+                    document.getElementById('result').innerText = "This article is Fake News";
+                }else{
+                    document.getElementById('result').innerText = "This article seems to be Legit";
+                }
+
+
+                // Update the document with the received data
+                
+            })   
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('result').innerText = 'Error fetching data.';
+            });
+        }
+    </script>
+</body>
+
+</html>
